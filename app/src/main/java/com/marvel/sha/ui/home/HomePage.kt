@@ -7,4 +7,6 @@ internal enum class HomePage(@StringRes val title: Int) {
     CHARACTERS(R.string.characters),
     COMICS(R.string.comics),
     CREATORS(R.string.creators),
+    SERIES(R.string.series),
+    STORIES(R.string.stories),
 }

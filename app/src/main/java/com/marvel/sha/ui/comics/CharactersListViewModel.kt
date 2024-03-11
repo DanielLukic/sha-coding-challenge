@@ -1,4 +1,4 @@
-package com.marvel.sha.ui.characters
+package com.marvel.sha.ui.comics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,14 +7,14 @@ import androidx.paging.cachedIn
 import bx.logging.Log
 import bx.util.tryCatching
 import com.marvel.sha.domain.MarvelCharacter
-import com.marvel.sha.ui.CharacterList
+import com.marvel.sha.ui.ComicsList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class CharactersListViewModel(
-    private val characters: CharacterList,
+internal class ComicsListViewModel(
+    private val comics: ComicsList,
 ) : ViewModel() {
 
     private val state = MutableStateFlow<PagingData<MarvelCharacter>>(PagingData.empty())
@@ -22,7 +22,7 @@ internal class CharactersListViewModel(
     init {
         viewModelScope.launch {
             tryCatching {
-                characters.observe().cachedIn(viewModelScope).collect { state.value = it }
+                comics.observe().cachedIn(viewModelScope).collect { state.value = it }
             }.onFailure {
                 Log.error(it, "ignored for this demo - but ideally show error and allow retry")
             }

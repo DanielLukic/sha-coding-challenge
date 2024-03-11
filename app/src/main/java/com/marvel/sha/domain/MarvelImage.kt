@@ -1,6 +1,6 @@
 package com.marvel.sha.domain
 
-internal data class MarvelThumbnail(
+internal data class MarvelImage(
     val path: String,
     val extension: String,
 ) {

@@ -34,7 +34,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.marvel.sha.R
 import com.marvel.sha.data.MarvelUrl
-import com.marvel.sha.data.string
+import com.marvel.sha.domain.MarvelCollection
 import com.marvel.sha.ui.IndeterminateProgress
 import com.marvel.sha.ui.ShaTopBar
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -161,11 +161,7 @@ private fun FlowItems(items: List<String>, color: Color = Color.Yellow) = FlowRo
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-private fun toItems(it: Map<String, Any>): List<String> {
-    val items = it["items"] as List<Map<String, Any>>
-    return items.map { it.string("name") }
-}
+private fun toItems(it: MarvelCollection) = it.items.map { it.name }
 
 private sealed interface Entry {
 

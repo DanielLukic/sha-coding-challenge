@@ -16,8 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.marvel.sha.R
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.ui.characters.CharactersListScreen
 import kotlinx.coroutines.launch
 
@@ -26,7 +25,7 @@ internal fun HomePager(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     pages: Array<HomePage>,
-    onCharacterClick: (MarvelEntity) -> Unit,
+    onCharacterClick: (MarvelCharacter) -> Unit,
 ) {
     Column(modifier) {
         val coroutineScope = rememberCoroutineScope()
@@ -50,17 +49,11 @@ internal fun HomePager(
         ) { index ->
             when (pages[index]) {
                 HomePage.CHARACTERS -> CharactersListScreen(onClick = onCharacterClick)
-                HomePage.COMICS     -> Surface(
+                else                -> Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(stringResource(id = R.string.comics))
-                }
-                HomePage.CREATORS   -> Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting(stringResource(id = R.string.creators))
+                    Greeting(pages[index].toString())
                 }
             }
         }

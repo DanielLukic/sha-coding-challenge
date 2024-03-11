@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.marvel.sha.BuildConfig
 import com.marvel.sha.data.RoomShaDatabase
 import com.marvel.sha.data.toMarvelEntity
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -27,7 +27,7 @@ internal class RetrofitRoomRepo(
     // in theory get more details from backend. but afaict there aren't any for this api...
     fun characterDetail(characterId: String) = dao.byId(characterId).map { gson.toMarvelEntity(it) }
 
-    fun characters(): Flow<PagingData<MarvelEntity>> = Pager(
+    fun characters(): Flow<PagingData<MarvelCharacter>> = Pager(
         config = PagingConfig(
             pageSize = RetrofitRoomPagingSource.PAGE_SIZE,
             prefetchDistance = 2,

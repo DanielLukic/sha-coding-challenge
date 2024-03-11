@@ -9,7 +9,7 @@ import com.marvel.sha.data.MarvelData
 import com.marvel.sha.data.MarvelResponse
 import com.marvel.sha.data.toMarvelEntity
 import com.marvel.sha.data.toRoomMarvelEntity
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import java.io.IOException
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -18,13 +18,13 @@ internal class RetrofitRoomPagingSource(
     private val dao: RoomCharactersDao,
     private val gson: Gson,
     private val load: suspend (Int) -> MarvelResponse,
-) : PagingSource<Int, MarvelEntity>() {
+) : PagingSource<Int, MarvelCharacter>() {
 
     private fun MarvelData.isLastPage() = count == 0
 
-    override fun getRefreshKey(state: PagingState<Int, MarvelEntity>) = state.anchorPosition
+    override fun getRefreshKey(state: PagingState<Int, MarvelCharacter>) = state.anchorPosition
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MarvelEntity> = try {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MarvelCharacter> = try {
         val offset = params.key ?: 0
         val (data, entities) = withContext(Cx.IO) { page(offset) }
         Log.info { data.copy(results = emptyList()) }
@@ -43,7 +43,7 @@ internal class RetrofitRoomPagingSource(
         LoadResult.Error(exception)
     }
 
-    private suspend fun page(offset: Int): Pair<MarvelData, List<MarvelEntity>> {
+    private suspend fun page(offset: Int): Pair<MarvelData, List<MarvelCharacter>> {
 
         var envelope: MarvelData? = null
 

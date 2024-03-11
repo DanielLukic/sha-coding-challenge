@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bx.util.Optional
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.ui.CharacterDetail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ internal class CharacterDetailViewModel(
 
     private val characterId = savedStateHandle.get<String>("characterId")
 
-    private val state = MutableStateFlow<Optional<MarvelEntity>>(Optional.empty())
+    private val state = MutableStateFlow<Optional<MarvelCharacter>>(Optional.empty())
 
     init {
         viewModelScope.launch {

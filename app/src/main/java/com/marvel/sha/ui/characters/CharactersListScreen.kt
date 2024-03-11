@@ -21,7 +21,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import bx.logging.Log
 import coil.compose.AsyncImage
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.ui.ErrorCard
 import com.marvel.sha.ui.IndeterminateProgress
 import org.koin.androidx.compose.koinViewModel
@@ -30,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 internal fun CharactersListScreen(
     modifier: Modifier = Modifier,
     model: CharactersListViewModel = koinViewModel(),
-    onClick: (MarvelEntity) -> Unit,
+    onClick: (MarvelCharacter) -> Unit,
 ) {
     val items = model.observe().collectAsLazyPagingItems()
     LazyColumn(modifier = modifier.imePadding()) {

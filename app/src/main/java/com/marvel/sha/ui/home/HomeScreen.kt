@@ -25,13 +25,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 
 @Composable @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
     pages: Array<HomePage> = HomePage.entries.toTypedArray(),
-    onCharacterClick: (MarvelEntity) -> Unit,
+    onCharacterClick: (MarvelCharacter) -> Unit,
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

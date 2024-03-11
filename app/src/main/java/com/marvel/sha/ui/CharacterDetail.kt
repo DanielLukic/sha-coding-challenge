@@ -1,8 +1,8 @@
 package com.marvel.sha.ui
 
-import com.marvel.sha.domain.MarvelEntity
+import com.marvel.sha.domain.MarvelCharacter
 import kotlinx.coroutines.flow.Flow
 
 internal interface CharacterDetail {
-    fun retrieve(characterId: String): Flow<MarvelEntity>
+    fun retrieve(characterId: String): Flow<MarvelCharacter>
 }
