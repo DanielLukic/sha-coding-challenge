@@ -1,5 +1,6 @@
 package com.marvel.sha.ui.characters
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +27,8 @@ internal class CharacterDetailViewModel(
             }
         }
     }
+
+    var color = MutableStateFlow(Color.Yellow)
 
     fun observe() = state.asStateFlow()
 
