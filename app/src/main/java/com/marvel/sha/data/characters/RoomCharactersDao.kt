@@ -1,9 +1,10 @@
-package com.marvel.sha.data
+package com.marvel.sha.data.characters
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.marvel.sha.data.RoomMarvelEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

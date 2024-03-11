@@ -1,10 +1,14 @@
-package com.marvel.sha.data
+package com.marvel.sha.data.characters
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import bx.logging.Log
 import bx.system.Cx
 import com.google.gson.Gson
+import com.marvel.sha.data.MarvelData
+import com.marvel.sha.data.MarvelResponse
+import com.marvel.sha.data.toMarvelEntity
+import com.marvel.sha.data.toRoomMarvelEntity
 import com.marvel.sha.domain.MarvelEntity
 import java.io.IOException
 import kotlinx.coroutines.withContext
@@ -13,7 +17,7 @@ import retrofit2.HttpException
 internal class RetrofitRoomPagingSource(
     private val dao: RoomCharactersDao,
     private val gson: Gson,
-    private val load: suspend (Int) -> MarvelCharacters,
+    private val load: suspend (Int) -> MarvelResponse,
 ) : PagingSource<Int, MarvelEntity>() {
 
     private fun MarvelData.isLastPage() = count == 0

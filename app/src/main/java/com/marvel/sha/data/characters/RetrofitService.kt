@@ -1,5 +1,6 @@
-package com.marvel.sha.data
+package com.marvel.sha.data.characters
 
+import com.marvel.sha.data.MarvelResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
@@ -17,7 +18,7 @@ internal interface RetrofitService {
         @Query("hash") hash: String,
         //@Query("limit") limit: Int, seems to break the api for me - keeping default for now
         @Query("offset") offset: Int,
-    ): MarvelCharacters
+    ): MarvelResponse
 
     companion object {
 

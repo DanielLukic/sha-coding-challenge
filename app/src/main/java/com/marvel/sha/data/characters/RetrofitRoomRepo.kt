@@ -1,4 +1,4 @@
-package com.marvel.sha.data
+package com.marvel.sha.data.characters
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -6,11 +6,13 @@ import androidx.paging.PagingData
 import bx.system.Clock
 import com.google.gson.Gson
 import com.marvel.sha.BuildConfig
+import com.marvel.sha.data.RoomShaDatabase
+import com.marvel.sha.data.toMarvelEntity
 import com.marvel.sha.domain.MarvelEntity
-import java.security.MessageDigest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import java.security.MessageDigest
 
 internal class RetrofitRoomRepo(
     private val database: RoomShaDatabase,

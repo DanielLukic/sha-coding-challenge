@@ -3,7 +3,7 @@ package com.marvel.sha
 import bx.system.Clock
 import com.google.gson.GsonBuilder
 import com.marvel.sha.data.DataModule
-import com.marvel.sha.data.RetrofitRoomRepo
+import com.marvel.sha.data.characters.RetrofitRoomRepo
 import com.marvel.sha.ui.CharacterDetail
 import com.marvel.sha.ui.CharacterList
 import com.marvel.sha.ui.UiModule

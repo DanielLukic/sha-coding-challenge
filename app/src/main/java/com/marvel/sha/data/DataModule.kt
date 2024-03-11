@@ -2,6 +2,8 @@ package com.marvel.sha.data
 
 import android.content.Context
 import androidx.room.Room
+import com.marvel.sha.data.characters.RetrofitRoomRepo
+import com.marvel.sha.data.characters.RetrofitService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import org.koin.core.module.dsl.singleOf
