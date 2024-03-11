@@ -29,7 +29,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun CharactersListScreen(
     modifier: Modifier = Modifier,
-    model: CharacterListViewModel = koinViewModel(),
+    model: CharactersListViewModel = koinViewModel(),
     onClick: (MarvelEntity) -> Unit,
 ) {
     val items = model.observe().collectAsLazyPagingItems()

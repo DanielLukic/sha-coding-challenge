@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class CharacterListViewModel(
+internal class CharactersListViewModel(
     private val characters: CharacterList,
 ) : ViewModel() {
 
