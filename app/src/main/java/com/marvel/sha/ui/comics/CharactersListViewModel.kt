@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import bx.logging.Log
 import bx.util.tryCatching
-import com.marvel.sha.domain.MarvelCharacter
+import com.marvel.sha.domain.MarvelComic
 import com.marvel.sha.ui.ComicsList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ internal class ComicsListViewModel(
     private val comics: ComicsList,
 ) : ViewModel() {
 
-    private val state = MutableStateFlow<PagingData<MarvelCharacter>>(PagingData.empty())
+    private val state = MutableStateFlow<PagingData<MarvelComic>>(PagingData.empty())
 
     init {
         viewModelScope.launch {
@@ -29,6 +29,6 @@ internal class ComicsListViewModel(
         }
     }
 
-    fun observe(): StateFlow<PagingData<MarvelCharacter>> = state.asStateFlow()
+    fun observe(): StateFlow<PagingData<MarvelComic>> = state.asStateFlow()
 
 }

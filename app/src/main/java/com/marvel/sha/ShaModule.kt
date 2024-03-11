@@ -3,7 +3,7 @@ package com.marvel.sha
 import bx.system.Clock
 import com.google.gson.GsonBuilder
 import com.marvel.sha.data.DataModule
-import com.marvel.sha.data.characters.RetrofitRoomRepo
+import com.marvel.sha.data.characters.CharactersRepository
 import com.marvel.sha.ui.CharacterDetail
 import com.marvel.sha.ui.CharacterList
 import com.marvel.sha.ui.UiModule
@@ -24,11 +24,11 @@ internal object AppModule {
 
     }
 
-    private class BindCharacterDetail(private val repo: RetrofitRoomRepo) : CharacterDetail {
+    private class BindCharacterDetail(private val repo: CharactersRepository) : CharacterDetail {
         override fun retrieve(characterId: String) = repo.characterDetail(characterId)
     }
 
-    private class BindCharacterList(private val repo: RetrofitRoomRepo) : CharacterList {
+    private class BindCharacterList(private val repo: CharactersRepository) : CharacterList {
         override fun observe() = repo.characters()
     }
 

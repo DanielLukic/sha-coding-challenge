@@ -6,17 +6,16 @@ import androidx.paging.PagingData
 import bx.system.Clock
 import com.google.gson.Gson
 import com.marvel.sha.BuildConfig
-import com.marvel.sha.data.RoomShaDatabase
-import com.marvel.sha.data.toMarvelEntity
+import com.marvel.sha.data.fromRoom
 import com.marvel.sha.domain.MarvelCharacter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import java.security.MessageDigest
 
-internal class RetrofitRoomRepo(
-    private val database: RoomShaDatabase,
-    private val service: RetrofitService,
+internal class CharactersRepository(
+    private val database: CharactersDatabase,
+    private val service: CharactersService,
     private val clock: Clock,
     private val gson: Gson,
 ) {
@@ -25,24 +24,24 @@ internal class RetrofitRoomRepo(
     val attribution = MutableStateFlow("")
 
     // in theory get more details from backend. but afaict there aren't any for this api...
-    fun characterDetail(characterId: String) = dao.byId(characterId).map { gson.toMarvelEntity(it) }
+    fun characterDetail(characterId: String) = dao.byId(characterId).map { gson.fromRoom(it) }
 
     fun characters(): Flow<PagingData<MarvelCharacter>> = Pager(
         config = PagingConfig(
-            pageSize = RetrofitRoomPagingSource.PAGE_SIZE,
+            pageSize = CharactersPagingSource.PAGE_SIZE,
             prefetchDistance = 2,
         ),
         pagingSourceFactory = { createPagingSource() },
     ).flow
 
-    private fun createPagingSource() = RetrofitRoomPagingSource(dao, gson) { offset ->
+    private fun createPagingSource() = CharactersPagingSource(dao, gson) { offset ->
         service.characters(offset).also {
             assert(it.code == 200) { it }
             attribution.value = it.attributionText
         }
     }
 
-    private suspend fun RetrofitService.characters(offset: Int) = with(auth()) {
+    private suspend fun CharactersService.characters(offset: Int) = with(auth()) {
         characters(ts, apikey, hash, offset)
     }
 

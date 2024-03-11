@@ -2,8 +2,9 @@ package com.marvel.sha.data
 
 import android.content.Context
 import androidx.room.Room
-import com.marvel.sha.data.characters.RetrofitRoomRepo
-import com.marvel.sha.data.characters.RetrofitService
+import com.marvel.sha.data.characters.CharactersDatabase
+import com.marvel.sha.data.characters.CharactersRepository
+import com.marvel.sha.data.characters.CharactersService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import org.koin.core.module.dsl.singleOf
@@ -13,13 +14,13 @@ internal object DataModule {
 
     operator fun invoke() = module {
 
-        fun roomDb(context: Context) = Room.databaseBuilder(
+        fun charactersDatabase(context: Context) = Room.databaseBuilder(
             context = context,
-            klass = RoomShaDatabase::class.java,
-            name = "sha.db",
+            klass = CharactersDatabase::class.java,
+            name = "characters.db",
         ).fallbackToDestructiveMigration().build()
 
-        fun retrofit() = RetrofitService.create()
+        fun charactersService() = CharactersService.create()
 
         fun ktor() = HttpClient(OkHttp) {
             engine {
@@ -33,11 +34,11 @@ internal object DataModule {
             }
         }
 
-        single { roomDb(get()) }
-        single { retrofit() }
+        single { charactersDatabase(get()) }
+        single { charactersService() }
         single { ktor() }
 
-        singleOf(::RetrofitRoomRepo)
+        singleOf(::CharactersRepository)
 
     }
 

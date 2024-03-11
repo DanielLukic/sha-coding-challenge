@@ -7,15 +7,15 @@ import bx.system.Cx
 import com.google.gson.Gson
 import com.marvel.sha.data.MarvelData
 import com.marvel.sha.data.MarvelResponse
-import com.marvel.sha.data.toMarvelEntity
-import com.marvel.sha.data.toRoomMarvelEntity
+import com.marvel.sha.data.fromRoom
+import com.marvel.sha.data.toRoom
 import com.marvel.sha.domain.MarvelCharacter
 import java.io.IOException
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-internal class RetrofitRoomPagingSource(
-    private val dao: RoomCharactersDao,
+internal class CharactersPagingSource(
+    private val dao: CharactersDao,
     private val gson: Gson,
     private val load: suspend (Int) -> MarvelResponse,
 ) : PagingSource<Int, MarvelCharacter>() {
@@ -60,7 +60,7 @@ internal class RetrofitRoomPagingSource(
             Log.info("network response: ${response.data.copy(results = emptyList())}")
 
             val entities = response.data.results.mapIndexed { idx, it ->
-                gson.toRoomMarvelEntity(offset + idx, it)
+                gson.toRoom(offset + idx, it)
             }
 
             Log.info("store ${entities.size} entities into room")
@@ -69,7 +69,7 @@ internal class RetrofitRoomPagingSource(
         }
 
         Log.info("slurp from room $offset .. ${offset.plus(PAGE_SIZE)}")
-        val entities = dao.paged(offset, offset + PAGE_SIZE - 1).map { gson.toMarvelEntity(it) }
+        val entities = dao.paged(offset, offset + PAGE_SIZE - 1).map { gson.fromRoom(it) }
         Log.warn { "slurped ${entities.size} entities" }
         envelope = envelope ?: MarvelData(offset, PAGE_SIZE, 0, entities.size, emptyList())
 

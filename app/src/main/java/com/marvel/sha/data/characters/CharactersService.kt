@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-internal interface RetrofitService {
+internal interface CharactersService {
 
     @GET("characters")
     suspend fun characters(
@@ -22,7 +22,7 @@ internal interface RetrofitService {
 
     companion object {
 
-        fun create(): RetrofitService {
+        fun create(): CharactersService {
 
             val logger = HttpLoggingInterceptor().apply { level = BASIC }
 
@@ -35,7 +35,7 @@ internal interface RetrofitService {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(RetrofitService::class.java)
+                .create(CharactersService::class.java)
 
         }
 

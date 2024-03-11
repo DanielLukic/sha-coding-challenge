@@ -53,7 +53,7 @@ internal fun HomePager(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(pages[index].toString())
+                    Text(pages[index].toString())
                 }
             }
         }
