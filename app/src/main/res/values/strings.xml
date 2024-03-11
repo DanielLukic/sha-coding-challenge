@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">sha</string>
+    <string name="app_back">Back</string>
+    <string name="app_loading">Loading</string>
+
+    <string name="characters">Characters</string>
+    <string name="comics">Comics</string>
+    <string name="creators">Creators</string>
+    <string name="series">Series</string>
+    <string name="stories">Stories</string>
+
+</resources>
