@@ -7,7 +7,7 @@ import com.marvel.sha.data.characters.CharacterEntity
 import com.marvel.sha.data.creators.CreatorDao
 import com.marvel.sha.data.creators.CreatorEntity
 
-@Database(entities = [CharacterEntity::class, CreatorEntity::class], version = 6)
+@Database(entities = [CharacterEntity::class, CreatorEntity::class], version = 7)
 internal abstract class ShaRoomDatabase : RoomDatabase() {
     abstract fun characters(): CharacterDao
     abstract fun creators(): CreatorDao

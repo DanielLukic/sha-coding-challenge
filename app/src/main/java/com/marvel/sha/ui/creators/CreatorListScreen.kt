@@ -64,9 +64,9 @@ internal fun CreatorListScreen(
         with(items.loadState) {
             when {
                 refresh is LoadState.Loading -> item { IndeterminateProgress() }
-                refresh is LoadState.Error   -> item { ErrorCard(refresh) }
+                refresh is LoadState.Error   -> item { ErrorCard(refresh) { items.retry() } }
                 append is LoadState.Loading  -> item { IndeterminateProgress() }
-                append is LoadState.Error    -> item { ErrorCard(append) }
+                append is LoadState.Error    -> item { ErrorCard(append) { items.retry() } }
             }
         }
         item { Spacer(modifier = Modifier.height(8.dp)) }

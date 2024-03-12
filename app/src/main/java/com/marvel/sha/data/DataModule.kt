@@ -15,6 +15,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.gson.gson
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
@@ -63,6 +64,7 @@ internal object DataModule {
     }
 
     private fun okhttp() = OkHttpClient.Builder()
+        .callTimeout(1, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
         .build()
 

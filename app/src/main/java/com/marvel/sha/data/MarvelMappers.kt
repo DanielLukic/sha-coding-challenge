@@ -18,7 +18,8 @@ internal fun Gson.toCharacterEntity(idx: Int, it: Map<String, Any>) = CharacterE
     data = toJson(it),
 )
 
-internal fun Gson.toCreatorEntity(it: Map<String, Any>) = CreatorEntity(
+internal fun Gson.toCreatorEntity(idx: Int, it: Map<String, Any>) = CreatorEntity(
+    idx = idx,
     id = it.int("id"),
     fullName = it.string("fullName"),
     data = toJson(it),

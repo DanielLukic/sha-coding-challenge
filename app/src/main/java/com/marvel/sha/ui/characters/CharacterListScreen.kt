@@ -24,15 +24,19 @@ import coil.compose.AsyncImage
 import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.ui.ErrorCard
 import com.marvel.sha.ui.IndeterminateProgress
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import org.koin.androidx.compose.koinViewModel
 
-@Composable
+@Composable @OptIn(ExperimentalCoroutinesApi::class)
 internal fun CharacterListScreen(
     modifier: Modifier = Modifier,
     model: CharacterListViewModel = koinViewModel(),
     onClick: (MarvelCharacter) -> Unit,
 ) {
-    val items = model.observe().collectAsLazyPagingItems()
+    val retry = MutableStateFlow(0)
+    val items = retry.flatMapLatest { model.observe() }.collectAsLazyPagingItems()
     LazyColumn(modifier = modifier.imePadding()) {
         item { Spacer(modifier = Modifier.height(8.dp)) }
         items(items.itemCount) { index ->

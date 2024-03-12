@@ -24,6 +24,7 @@ internal class CreatorService(
             @Query("apikey") apikey: String,
             @Query("hash") hash: String,
             @Query("offset") offset: Int,
+            @Query("limit") limit: Int = 20,
         ): MarvelResponse
     }
 }

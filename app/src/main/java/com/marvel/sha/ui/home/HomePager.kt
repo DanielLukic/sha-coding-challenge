@@ -50,9 +50,10 @@ internal fun HomePager(
             verticalAlignment = Alignment.Top
         ) { index ->
             when (pages[index]) {
-                HomePage.CHARACTERS -> CharacterListScreen(onClick = onCharacterClick)
-                HomePage.COMICS     -> ComicListScreen(onClick = onComicClick)
+//                HomePage.CHARACTERS -> CharacterListScreen(onClick = onCharacterClick)
+//                HomePage.COMICS     -> ComicListScreen(onClick = onComicClick)
                 HomePage.CREATORS   -> CreatorListScreen(onClick = {})
+                else -> Unit
             }
         }
     }

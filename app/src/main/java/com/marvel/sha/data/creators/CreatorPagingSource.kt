@@ -59,7 +59,9 @@ internal class CreatorPagingSource(
 
             Log.info("network response: ${response.data.copy(results = emptyList())}")
 
-            val entities = response.data.results.map(gson::toCreatorEntity)
+            val entities = response.data.results.mapIndexed { idx, it ->
+                gson.toCreatorEntity(offset + idx, it)
+            }
 
             Log.info("store ${entities.size} entities into room")
             dao.upsert(entities)
