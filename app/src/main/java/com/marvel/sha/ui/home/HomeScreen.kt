@@ -26,12 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.marvel.sha.domain.MarvelCharacter
+import com.marvel.sha.domain.MarvelComic
 
 @Composable @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
     pages: Array<HomePage> = HomePage.entries.toTypedArray(),
     onCharacterClick: (MarvelCharacter) -> Unit,
+    onComicClick: (MarvelComic) -> Unit,
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -44,6 +46,7 @@ internal fun HomeScreen(
             pagerState = pagerState,
             pages = pages,
             onCharacterClick = onCharacterClick,
+            onComicClick = onComicClick,
         )
     }
 }

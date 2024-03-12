@@ -15,3 +15,6 @@ SELECT * FROM comic WHERE idx >= :fromInclusive AND idx < :toExclusive ORDER BY 
 
 insert:
 INSERT INTO comic(idx, id, json) VALUES (?, ?, ?);
+
+byId:
+SELECT * FROM comic WHERE id = :id;

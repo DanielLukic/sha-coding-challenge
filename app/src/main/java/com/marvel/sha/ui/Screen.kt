@@ -8,6 +8,7 @@ internal sealed class Screen(
     val route: String,
     val args: List<NamedNavArgument> = emptyList(),
 ) {
+
     data object Home : Screen("home")
 
     data object CharacterDetail : Screen(
@@ -16,4 +17,12 @@ internal sealed class Screen(
     ) {
         fun createRoute(characterId: String) = "character/${characterId}"
     }
+
+    data object ComicDetail : Screen(
+        route = "comic/{comicId}",
+        args = listOf(navArgument("comicId") { type = NavType.StringType }),
+    ) {
+        fun createRoute(comicId: String) = "comic/${comicId}"
+    }
+
 }

@@ -7,6 +7,7 @@ import com.marvel.sha.data.characters.CharactersRepository
 import com.marvel.sha.data.comics.ComicsRepository
 import com.marvel.sha.ui.CharacterDetail
 import com.marvel.sha.ui.CharactersList
+import com.marvel.sha.ui.ComicDetail
 import com.marvel.sha.ui.ComicsList
 import com.marvel.sha.ui.UiModule
 import org.koin.dsl.module
@@ -23,6 +24,7 @@ internal object AppModule {
         // role bindings for crossing module boundaries in a decoupled way:
         single<CharacterDetail> { BindCharacterDetail(get()) }
         single<CharactersList> { BindCharactersList(get()) }
+        single<ComicDetail> { BindComicDetail(get()) }
         single<ComicsList> { BindComicsList(get()) }
 
     }
@@ -33,6 +35,10 @@ internal object AppModule {
 
     private class BindCharactersList(private val repo: CharactersRepository) : CharactersList {
         override fun observe() = repo.characters()
+    }
+
+    private class BindComicDetail(private val repo: ComicsRepository) : ComicDetail {
+        override fun retrieve(comicId: String) = repo.comicDetail(comicId)
     }
 
     private class BindComicsList(private val repo: ComicsRepository) : ComicsList {

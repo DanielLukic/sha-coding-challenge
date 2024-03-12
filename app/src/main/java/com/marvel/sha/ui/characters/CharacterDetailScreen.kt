@@ -44,7 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 // but the only goal of this was to use the recycler view..
 // because this was a test requirement..
 
-@Composable internal fun CharacterDetail(
+@Composable internal fun CharacterDetailScreen(
     modifier: Modifier = Modifier,
     model: CharacterDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit,
