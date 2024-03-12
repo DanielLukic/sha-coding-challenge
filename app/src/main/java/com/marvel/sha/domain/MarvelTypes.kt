@@ -1,9 +1,6 @@
 package com.marvel.sha.domain
 
 internal data class MarvelCollection(
-    val available: Int,
-    val returned: Int,
-    val collectionURI: String,
     val items: List<MarvelResource>,
 )
 

@@ -27,9 +27,9 @@ import com.marvel.sha.ui.IndeterminateProgress
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun ComicsListScreen(
+internal fun ComicListScreen(
     modifier: Modifier = Modifier,
-    model: ComicsListViewModel = koinViewModel(),
+    model: ComicListViewModel = koinViewModel(),
     onClick: (MarvelComic) -> Unit,
 ) {
     val items = model.observe().collectAsLazyPagingItems()

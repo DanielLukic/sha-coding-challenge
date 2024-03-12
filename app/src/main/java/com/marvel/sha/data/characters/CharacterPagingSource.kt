@@ -8,14 +8,14 @@ import com.google.gson.Gson
 import com.marvel.sha.data.MarvelData
 import com.marvel.sha.data.MarvelResponse
 import com.marvel.sha.data.fromRoom
-import com.marvel.sha.data.toRoom
+import com.marvel.sha.data.toCharacterEntity
 import com.marvel.sha.domain.MarvelCharacter
 import java.io.IOException
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-internal class CharactersPagingSource(
-    private val dao: CharactersDao,
+internal class CharacterPagingSource(
+    private val dao: CharacterDao,
     private val gson: Gson,
     private val load: suspend (Int) -> MarvelResponse,
 ) : PagingSource<Int, MarvelCharacter>() {
@@ -60,7 +60,7 @@ internal class CharactersPagingSource(
             Log.info("network response: ${response.data.copy(results = emptyList())}")
 
             val entities = response.data.results.mapIndexed { idx, it ->
-                gson.toRoom(offset + idx, it)
+                gson.toCharacterEntity(offset + idx, it)
             }
 
             Log.info("store ${entities.size} entities into room")
