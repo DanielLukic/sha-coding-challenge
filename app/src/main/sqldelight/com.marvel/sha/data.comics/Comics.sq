@@ -1,0 +1,17 @@
+CREATE TABLE comic (
+  idx INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER NOT NULL,
+  json TEXT NOT NULL
+);
+
+clear:
+DELETE FROM comic;
+
+count:
+SELECT COUNT(*) FROM comic;
+
+paged:
+SELECT * FROM comic WHERE idx >= :fromInclusive AND idx < :toExclusive ORDER BY idx ASC;
+
+insert:
+INSERT INTO comic(idx, id, json) VALUES (?, ?, ?);

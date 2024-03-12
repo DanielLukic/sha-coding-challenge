@@ -67,6 +67,7 @@ sqldelight {
         }
     }
 }
+
 dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
@@ -77,6 +78,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.android.sqldelight)
+    implementation(libs.android.sqldelight.coroutines)
+    implementation(libs.android.sqldelight.paging)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -106,7 +109,9 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content)
     implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.gson)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.okhttp)
     implementation(libs.okhttp)

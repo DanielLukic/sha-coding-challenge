@@ -7,14 +7,14 @@ import androidx.paging.cachedIn
 import bx.logging.Log
 import bx.util.tryCatching
 import com.marvel.sha.domain.MarvelCharacter
-import com.marvel.sha.ui.CharacterList
+import com.marvel.sha.ui.CharactersList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal class CharactersListViewModel(
-    private val characters: CharacterList,
+    private val characters: CharactersList,
 ) : ViewModel() {
 
     private val state = MutableStateFlow<PagingData<MarvelCharacter>>(PagingData.empty())
