@@ -50,17 +50,17 @@ internal fun CreatorDetailScreen(
                     InlineImage(detail.thumbnail, modifier = Modifier.height(300.dp).padding(16.dp))
                 }
                 detail.comics().onNotEmpty {
-                    item { MarvelSection(sectionColor, "Comics", it.joinToString(", ") { it.name }) }
+                    item { MarvelSection("Comics", sectionColor, it.joinToString(", ") { it.name }) }
                 }
                 detail.stories().onNotEmpty {
-                    item { MarvelSection(sectionColor, "Stories", it.joinToString(", ") { it.name }) }
+                    item { MarvelSection("Stories", sectionColor, it.joinToString(", ") { it.name }) }
                 }
                 detail.series().onNotEmpty {
-                    item { MarvelSection(sectionColor, "Series", it.joinToString(", ") { it.name }) }
+                    item { MarvelSection("Series", sectionColor, it.joinToString(", ") { it.name }) }
                 }
                 detail.urls.onNotEmpty {
                     item {
-                        MarvelSection(sectionColor, "Web Links") {
+                        MarvelSection("Web Links", sectionColor) {
                             FlowRow { it.forEach { Button(onClick = {}) { Text(it.type) } } }
                         }
                     }

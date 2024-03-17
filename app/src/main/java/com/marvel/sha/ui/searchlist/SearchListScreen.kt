@@ -1,20 +1,22 @@
 package com.marvel.sha.ui.searchlist
 
+import android.app.Activity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import bx.logging.Log
 import com.marvel.sha.ui.common.LoadingState
 
-@Composable @OptIn(ExperimentalMaterial3Api::class)
+@Composable @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 internal fun <T : Any> SearchListScreen(
     modifier: Modifier = Modifier,
     state: LazyGridState = rememberLazyGridState(),
@@ -26,36 +28,7 @@ internal fun <T : Any> SearchListScreen(
     onChangeQuery: (String) -> Unit,
     onClearQuery: () -> Unit,
     onClick: (T) -> Unit,
-) = SearchBar(
-    query = query.value,
-    onQueryChange = { onChangeQuery(it) },
-    onSearch = {},
-    placeholder = {
-        Text(text = "Filter by name")
-    },
-    leadingIcon = {
-        Icon(
-            imageVector = Icons.Default.Search,
-            tint = MaterialTheme.colorScheme.onSurface,
-            contentDescription = null
-        )
-    },
-    trailingIcon = {
-        if (query.value.isNotEmpty()) IconButton(onClick = onClearQuery) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                tint = MaterialTheme.colorScheme.onSurface,
-                contentDescription = "Clear search"
-            )
-        }
-    },
-    active = true,
-    onActiveChange = {
-        Log.warn { it }
-        Log.warn { it }
-        Log.warn { it }
-    },
-) {
+) = Box {
     if (items.itemCount == 0) {
         LoadingState(items)
     }
@@ -74,4 +47,18 @@ internal fun <T : Any> SearchListScreen(
             }
         }
     }
+    val activity = LocalContext.current as Activity
+    val portrait = calculateWindowSizeClass(activity).heightSizeClass != WindowHeightSizeClass.Compact
+    if (portrait) FloatingSearchField(
+        modifier = Modifier.align(Alignment.BottomStart),
+        query = query,
+        onChangeQuery = onChangeQuery,
+        onClearQuery = onClearQuery
+    )
+    else FabSearchBar(
+        modifier = Modifier.align(Alignment.BottomEnd),
+        query = query,
+        onChangeQuery = onChangeQuery,
+        onClearQuery = onClearQuery
+    )
 }

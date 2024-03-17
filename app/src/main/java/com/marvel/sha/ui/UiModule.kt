@@ -17,5 +17,6 @@ internal object UiModule {
         viewModelOf(::ComicListViewModel)
         viewModelOf(::CreatorListViewModel)
         viewModelOf(::CreatorDetailViewModel)
+        viewModelOf(::ShaHomeViewModel)
     }
 }

@@ -1,9 +1,13 @@
 package com.marvel.sha.ui
 
 import android.app.Activity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -16,9 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.marvel.sha.R
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.domain.MarvelComic
 import com.marvel.sha.domain.MarvelCreator
@@ -26,10 +30,12 @@ import com.marvel.sha.ui.ShaPage.*
 import com.marvel.sha.ui.characters.CharacterListScreen
 import com.marvel.sha.ui.comics.ComicListScreen
 import com.marvel.sha.ui.creators.CreatorListScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 internal fun ShaHomeScreen(
     modifier: Modifier = Modifier,
+    model: ShaHomeViewModel = koinViewModel(),
     screen: MutableState<ShaPage> = remember { mutableStateOf(COMICS) },
     onCharacterClick: (MarvelCharacter) -> Unit,
     onComicClick: (MarvelComic) -> Unit,
@@ -37,7 +43,7 @@ internal fun ShaHomeScreen(
 ) {
     val activity = LocalContext.current as Activity
     val portrait = calculateWindowSizeClass(activity).heightSizeClass != WindowHeightSizeClass.Compact
-
+    val infoShowing = remember { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = if (portrait) modifier.nestedScroll(scrollBehavior.nestedScrollConnection) else modifier,
@@ -55,61 +61,36 @@ internal fun ShaHomeScreen(
                         textAlign = TextAlign.Center
                     )
                 },
+                actions = {
+                    IconButton(onClick = { infoShowing.value = true }) {
+                        Icon(Icons.Default.Info, contentDescription = "Show info")
+                    }
+                }
             )
         },
-        bottomBar = { if (portrait) ShaBottomBar(screen) }
+        bottomBar = { if (portrait) ShaBottomBar(screen) },
     ) { padding ->
-        Row(modifier = Modifier.padding(padding)) {
-            if (!portrait) ShaNavRail(screen)
-            when (screen.value) {
-                CHARACTERS -> CharacterListScreen(onClick = onCharacterClick)
-                COMICS     -> ComicListScreen(onClick = onComicClick)
-                CREATORS   -> CreatorListScreen(onClick = onCreatorClick)
+        Box(modifier = Modifier.padding(padding)) {
+            Row {
+                if (!portrait) ShaNavRail(screen) {
+                    infoShowing.value = true
+                }
+                when (screen.value) {
+                    CHARACTERS -> CharacterListScreen(onClick = onCharacterClick)
+                    COMICS     -> ComicListScreen(onClick = onComicClick)
+                    CREATORS   -> CreatorListScreen(onClick = onCreatorClick)
+                }
+            }
+            if (infoShowing.value) {
+                val attribution = model.attributionFlow.collectAsStateWithLifecycle()
+                AlertDialog(
+                    onDismissRequest = { infoShowing.value = false },
+                    title = { Text("Marvel Super Hero App") },
+                    text = { LazyColumn { item { Text(attribution.value) } } },
+                    confirmButton = { TextButton(onClick = { infoShowing.value = false }) { Text("OK") } },
+                    modifier = Modifier.padding(16.dp),
+                )
             }
         }
     }
-}
-
-@Composable
-internal fun ShaBottomBar(screen: MutableState<ShaPage>) = BottomAppBar {
-    NavigationBarItem(
-        selected = screen.value == COMICS,
-        icon = {},
-        label = { Text(stringResource(R.string.comics)) },
-        onClick = { screen.value = COMICS },
-    )
-    NavigationBarItem(
-        selected = screen.value == CHARACTERS,
-        icon = {},
-        label = { Text(stringResource(R.string.characters)) },
-        onClick = { screen.value = CHARACTERS },
-    )
-    NavigationBarItem(
-        selected = screen.value == CREATORS,
-        icon = {},
-        label = { Text(stringResource(R.string.creators)) },
-        onClick = { screen.value = CREATORS },
-    )
-}
-
-@Composable
-internal fun ShaNavRail(screen: MutableState<ShaPage>) = NavigationRail {
-    NavigationRailItem(
-        selected = screen.value == COMICS,
-        icon = {},
-        label = { Text(stringResource(R.string.comics)) },
-        onClick = { screen.value = COMICS },
-    )
-    NavigationRailItem(
-        selected = screen.value == CHARACTERS,
-        icon = {},
-        label = { Text(stringResource(R.string.characters)) },
-        onClick = { screen.value = CHARACTERS },
-    )
-    NavigationRailItem(
-        selected = screen.value == CREATORS,
-        icon = {},
-        label = { Text(stringResource(R.string.creators)) },
-        onClick = { screen.value = CREATORS },
-    )
 }

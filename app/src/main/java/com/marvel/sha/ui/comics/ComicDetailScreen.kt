@@ -52,27 +52,27 @@ internal fun ComicDetailScreen(
                     InlineImage(detail.thumbnail, modifier = Modifier.height(300.dp).padding(16.dp))
                 }
                 detail.description?.onNotBlank {
-                    item { MarvelSection(sectionColor, "Description", it) }
+                    item { MarvelSection("Description", sectionColor, it) }
                 }
                 detail.characters().onNotEmpty {
-                    item { MarvelSection(sectionColor, "Characters", it.joinToString(", ") { it.name }) }
+                    item { MarvelSection("Characters", sectionColor, it.joinToString(", ") { it.name }) }
                 }
                 detail.creators().onNotEmpty {
-                    item { MarvelSection(sectionColor, "Creators", it.joinToString(", ") { it.name }) }
+                    item { MarvelSection("Creators", sectionColor, it.joinToString(", ") { it.name }) }
                 }
                 detail.textObjects.forEach {
-                    item { MarvelSection(sectionColor, it.string("type"), it.string("text")) }
+                    item { MarvelSection(it.string("type"), sectionColor, it.string("text")) }
                 }
                 detail.urls.onNotEmpty {
                     item {
-                        MarvelSection(sectionColor, "Web Links") {
+                        MarvelSection("Web Links", sectionColor) {
                             FlowRow { it.forEach { Button(onClick = {}) { Text(it.type) } } }
                         }
                     }
                 }
                 detail.images.forEach {
                     if (it == detail.thumbnail) return@forEach
-                    item { MarvelSection(sectionColor, "Extra Image") { InlineImage(it) } }
+                    item { MarvelSection("Extra Image", sectionColor) { InlineImage(it) } }
                 }
             }
         }

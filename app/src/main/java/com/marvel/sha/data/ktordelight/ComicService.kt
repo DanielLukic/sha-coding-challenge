@@ -5,14 +5,15 @@ import com.marvel.sha.data.BASE_URL
 import com.marvel.sha.data.MarvelAuthentication
 import com.marvel.sha.data.MarvelResponse
 import com.marvel.sha.data.string
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
+import com.marvel.sha.domain.MarvelAttribution
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 
 internal class ComicService(
     private val client: HttpClient,
     private val authentication: MarvelAuthentication,
+    private val attribution: MarvelAttribution,
 ) {
     suspend fun comics(offset: Int, query: String) = client.get(BASE_URL + "comics") {
         url {
@@ -29,8 +30,9 @@ internal class ComicService(
         }
     }.body<MarvelResponse>().also {
         it.data.results.forEachIndexed { idx, it ->
-            Log.info { "#${offset + idx}: ${it.string("title")}" }
+            Log.verbose { "#${offset + idx}: ${it.string("title")}" }
         }
+        attribution.value = it.attributionText ?: attribution.value
     }
 
 }

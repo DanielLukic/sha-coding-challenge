@@ -92,7 +92,7 @@ internal class ComicRemoteMediator(
             if (offset == 0) database.clear()
 
             entities.forEachIndexed { idx, it ->
-                Log.info("#${offset + idx}: ${it.string("title")}")
+                Log.verbose("#${offset + idx}: ${it.string("title")}")
                 database.insert(
                     idx = (offset + idx).toLong(),
                     id = it.int("id").toLong(),

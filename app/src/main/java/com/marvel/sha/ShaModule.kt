@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.marvel.sha.data.DataModule
 import com.marvel.sha.data.MarvelRepository
 import com.marvel.sha.data.ktordelight.ComicRepository
+import com.marvel.sha.domain.MarvelAttribution
 import com.marvel.sha.ui.ComicDetail
 import com.marvel.sha.ui.ComicList
 import com.marvel.sha.ui.MarvelDomain
@@ -19,6 +20,7 @@ internal object ShaModule {
 
         single { Clock() }
         single { GsonBuilder().setPrettyPrinting().setLenient().create() }
+        single { MarvelAttribution(get()) }
 
         // role bindings for crossing module boundaries in a decoupled way:
         single<ComicDetail> { BindComicDetail(get()) }
