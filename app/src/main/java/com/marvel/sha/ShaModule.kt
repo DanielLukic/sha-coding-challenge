@@ -3,18 +3,15 @@ package com.marvel.sha
 import bx.system.Clock
 import com.google.gson.GsonBuilder
 import com.marvel.sha.data.DataModule
-import com.marvel.sha.data.characters.CharacterRepository
-import com.marvel.sha.data.comics.ComicsRepository
-import com.marvel.sha.data.creators.CreatorRepository
-import com.marvel.sha.ui.CharacterDetail
-import com.marvel.sha.ui.CharactersList
+import com.marvel.sha.data.MarvelRepository
+import com.marvel.sha.data.ktordelight.ComicRepository
 import com.marvel.sha.ui.ComicDetail
-import com.marvel.sha.ui.ComicsList
-import com.marvel.sha.ui.Creators
+import com.marvel.sha.ui.ComicList
+import com.marvel.sha.ui.MarvelDomain
 import com.marvel.sha.ui.UiModule
 import org.koin.dsl.module
 
-internal object AppModule {
+internal object ShaModule {
 
     operator fun invoke() = module {
 
@@ -24,33 +21,27 @@ internal object AppModule {
         single { GsonBuilder().setPrettyPrinting().setLenient().create() }
 
         // role bindings for crossing module boundaries in a decoupled way:
-        single<CharacterDetail> { BindCharacterDetail(get()) }
-        single<CharactersList> { BindCharactersList(get()) }
         single<ComicDetail> { BindComicDetail(get()) }
-        single<ComicsList> { BindComicsList(get()) }
-        single<Creators> { BindCreators(get()) }
+        single<ComicList> { BindComicList(get()) }
+        single<MarvelDomain> { BindMarvelDomain(get()) }
 
     }
 
-    private class BindCharacterDetail(private val repo: CharacterRepository) : CharacterDetail {
-        override fun retrieve(characterId: String) = repo.characterDetail(characterId)
+    private class BindComicDetail(private val repo: ComicRepository) : ComicDetail {
+        override suspend fun retrieve(comicId: String) = repo.comicDetail(comicId)
     }
 
-    private class BindCharactersList(private val repo: CharacterRepository) : CharactersList {
-        override fun observe() = repo.characterList()
+    private class BindComicList(private val repo: ComicRepository) : ComicList {
+        override fun observe(query: String) = repo.comics(query)
     }
 
-    private class BindComicDetail(private val repo: ComicsRepository) : ComicDetail {
-        override fun retrieve(comicId: String) = repo.comicDetail(comicId)
-    }
-
-    private class BindComicsList(private val repo: ComicsRepository) : ComicsList {
-        override fun observe() = repo.comics()
-    }
-
-    private class BindCreators(private val repo: CreatorRepository) : Creators {
-        override fun observe() = repo.creatorList()
-        override fun retrieve(id: String) = TODO()
+    private class BindMarvelDomain(private val repo: MarvelRepository) : MarvelDomain {
+        override fun characterList(query: String) = repo.characterList(query)
+        override fun comicList(query: String) = repo.comicList(query)
+        override fun creatorList(query: String) = repo.creatorList(query)
+        override suspend fun characterDetail(id: String) = repo.characterDetail(id)
+        override suspend fun comicDetail(id: String) = repo.comicDetail(id)
+        override suspend fun creatorDetail(id: String) = repo.creatorDetail(id)
     }
 
 }

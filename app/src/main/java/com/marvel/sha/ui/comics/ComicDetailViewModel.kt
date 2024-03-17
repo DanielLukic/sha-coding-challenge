@@ -21,7 +21,7 @@ internal class ComicDetailViewModel(
 
     init {
         viewModelScope.launch {
-            comicDetail.retrieve(comicId ?: error("null comic id")).collect {
+            comicDetail.retrieve(comicId ?: error("null comic id")).let {
                 state.value = Optional.of(it)
             }
         }

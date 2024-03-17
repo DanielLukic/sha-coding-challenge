@@ -89,6 +89,10 @@ tailrec fun Any?.toLog(): String = when (this) {
 
 fun Array<Any>.toLog() = toList().map { it.toLog() }
 
+fun <T> List<T>.onNotEmpty(convert: (List<T>) -> Unit) {
+    if (isNotEmpty()) convert(this)
+}
+
 fun <T> List<T>.ifNotEmpty(convert: (List<T>) -> List<T>): List<T> =
     if (isEmpty()) this else convert(this)
 

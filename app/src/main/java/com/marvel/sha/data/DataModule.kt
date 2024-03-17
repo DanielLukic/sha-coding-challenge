@@ -4,18 +4,13 @@ import android.content.Context
 import androidx.room.Room
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.marvel.sha.Database
-import com.marvel.sha.data.characters.CharacterRepository
-import com.marvel.sha.data.characters.CharacterService
-import com.marvel.sha.data.comics.ComicsRepository
-import com.marvel.sha.data.comics.ComicsService
-import com.marvel.sha.data.creators.CreatorRepository
-import com.marvel.sha.data.creators.CreatorService
+import com.marvel.sha.data.ktordelight.ComicRepository
+import com.marvel.sha.data.ktordelight.ComicService
 import commarvel.sha.datacomics.ComicsQueries
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.gson.gson
-import java.util.concurrent.TimeUnit
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.gson.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
@@ -32,13 +27,11 @@ internal object DataModule {
         single { ktor() }
         single { okhttp() }
 
-        singleOf(::CharacterRepository)
-        singleOf(::CharacterService)
-        singleOf(::ComicsRepository)
-        singleOf(::ComicsService)
-        singleOf(::CreatorRepository)
-        singleOf(::CreatorService)
+        singleOf(::ComicRepository)
+        singleOf(::ComicService)
         singleOf(::MarvelAuthentication)
+        singleOf(::MarvelRepository)
+        singleOf(::MarvelService)
 
     }
 
@@ -52,19 +45,9 @@ internal object DataModule {
 
     private fun ktor() = HttpClient(OkHttp) {
         install(ContentNegotiation) { gson() }
-        engine {
-            config {
-                followRedirects(false)
-                followSslRedirects(false)
-            }
-            //addInterceptor(...)
-            //addNetworkInterceptor(...)
-            //preconfigured =
-        }
     }
 
     private fun okhttp() = OkHttpClient.Builder()
-        .callTimeout(1, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply { level = BASIC })
         .build()
 

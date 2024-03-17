@@ -1,12 +1,8 @@
 package com.marvel.sha.ui.creators
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import com.marvel.sha.ui.Creators
+import com.marvel.sha.domain.MarvelCreator
+import com.marvel.sha.ui.MarvelDomain
+import com.marvel.sha.ui.searchlist.SearchListViewModel
 
-internal class CreatorListViewModel(
-    private val creators: Creators,
-) : ViewModel() {
-    fun observe() = creators.observe().cachedIn(viewModelScope)
-}
+internal class CreatorListViewModel(private val domain: MarvelDomain) :
+    SearchListViewModel<MarvelCreator>(data = domain::creatorList)

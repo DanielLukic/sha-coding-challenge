@@ -4,7 +4,7 @@ import com.marvel.sha.data.MarvelUrl
 
 internal data class MarvelComic(
     val id: Int,
-    val description: String,
+    val description: String?,
     val digitalId: Int,
     val title: String,
     val issueNumber: String,
@@ -28,4 +28,6 @@ internal data class MarvelComic(
     val characters: MarvelCollection,
     val stories: MarvelCollection,
     val events: MarvelCollection,
-)
+) {
+    val extraImagesBadge get() = (images - thumbnail).size.takeIf { it > 0 }
+}

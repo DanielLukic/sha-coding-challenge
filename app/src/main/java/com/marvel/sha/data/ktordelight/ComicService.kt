@@ -1,26 +1,36 @@
-package com.marvel.sha.data.comics
+package com.marvel.sha.data.ktordelight
 
+import bx.logging.Log
 import com.marvel.sha.data.BASE_URL
 import com.marvel.sha.data.MarvelAuthentication
 import com.marvel.sha.data.MarvelResponse
+import com.marvel.sha.data.string
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
-internal class ComicsService(
+internal class ComicService(
     private val client: HttpClient,
     private val authentication: MarvelAuthentication,
 ) {
-    suspend fun comics(offset: Int): MarvelResponse = client.get(BASE_URL + "comics") {
+    suspend fun comics(offset: Int, query: String) = client.get(BASE_URL + "comics") {
         url {
+            Log.warn { "comics $offset $query" }
             with(authentication()) {
                 parameter("ts", ts)
                 parameter("apikey", apikey)
                 parameter("hash", hash)
             }
+            if (query.isNotBlank()) parameter("titleStartsWith", query)
+            parameter("formatType", "comic")
             parameter("offset", offset)
+            parameter("orderBy", "title")
         }
-    }.body()
+    }.body<MarvelResponse>().also {
+        it.data.results.forEachIndexed { idx, it ->
+            Log.info { "#${offset + idx}: ${it.string("title")}" }
+        }
+    }
 
 }

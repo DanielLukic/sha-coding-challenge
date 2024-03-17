@@ -1,6 +1,7 @@
 CREATE TABLE comic (
-  idx INTEGER PRIMARY KEY NOT NULL,
-  id INTEGER NOT NULL,
+  idx INTEGER NOT NULL,
+  id INTEGER PRIMARY KEY NOT NULL,
+  title TEXT NOT NULL,
   json TEXT NOT NULL
 );
 
@@ -11,10 +12,10 @@ count:
 SELECT COUNT(*) FROM comic;
 
 paged:
-SELECT * FROM comic WHERE idx >= :fromInclusive AND idx < :toExclusive ORDER BY idx ASC;
+SELECT * FROM comic ORDER BY idx ASC LIMIT :limit OFFSET :offset;
 
 insert:
-INSERT INTO comic(idx, id, json) VALUES (?, ?, ?);
+INSERT OR REPLACE INTO comic (idx, id, title, json) VALUES (:idx, :id, :title, :json);
 
 byId:
 SELECT * FROM comic WHERE id = :id;

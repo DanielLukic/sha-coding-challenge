@@ -2,7 +2,9 @@ package com.marvel.sha.domain
 
 internal data class MarvelCollection(
     val items: List<MarvelResource>,
-)
+) {
+    operator fun invoke() = items
+}
 
 internal data class MarvelResource(
     val resourceURI: String,

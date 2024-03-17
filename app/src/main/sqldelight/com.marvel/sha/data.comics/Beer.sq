@@ -1,0 +1,20 @@
+CREATE TABLE beer (
+  idx INTEGER NOT NULL,
+  id INTEGER PRIMARY KEY NOT NULL,
+  json TEXT NOT NULL
+);
+
+clear:
+DELETE FROM beer;
+
+count:
+SELECT COUNT(*) FROM beer;
+
+paged:
+SELECT * FROM beer ORDER BY idx ASC LIMIT :limit OFFSET :offset;
+
+insert:
+INSERT OR REPLACE INTO beer (idx, id, json) VALUES (:idx, :id, :json);
+
+byId:
+SELECT * FROM beer WHERE id = :id;

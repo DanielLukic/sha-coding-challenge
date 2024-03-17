@@ -2,156 +2,70 @@ package com.marvel.sha.ui.creators
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import bx.logging.Log
-import coil.compose.AsyncImage
-import com.marvel.sha.data.MarvelUrl
-import com.marvel.sha.domain.MarvelCollection
-
-// of course a lot of room for improvement here..
-// but the only goal of this was to use the recycler view..
-// because this was a test requirement..
-
-//@Composable internal fun CharacterDetailScreen(
-//    modifier: Modifier = Modifier,
-//    model: CharacterDetailViewModel = koinViewModel(),
-//    onBackClick: () -> Unit,
-//) {
-//
-//    val color = model.color.collectAsState()
-//
-//    val detail = model.observe().collectAsState().value.valueOrNull()
-//    val title = detail?.name ?: stringResource(id = R.string.app_loading)
-//
-//    val context = LocalContext.current
-//    val loader = remember { ImageLoader(context).newBuilder().allowHardware(false).build() }
-//    if (detail != null) LaunchedEffect(key1 = detail.thumbnail.url) {
-//        val bd = loader.execute(
-//            ImageRequest.Builder(context).data(detail.thumbnail.url).build()
-//        ).drawable as? BitmapDrawable
-//        bd?.bitmap?.let { bitmap ->
-//            suspendCancellableCoroutine<Unit> {
-//                val p = Palette.from(bitmap).generate()
-//                val c = p.vibrantSwatch?.rgb?.let {
-//                    Color(it.toLong() or 0xFF000000)
-//                }
-//                c?.let { model.color.value = c }
-//                it.invokeOnCancellation {
-//                    bitmap.recycle().also { Log.info("recycled") }
-//                }
-//            }
-//        }
-//    }
-//
-//    Scaffold(
-//        modifier = modifier,
-//        topBar = { ShaTopBar(title = title, onBackClick = onBackClick) }
-//    ) { contentPadding ->
-//        Surface(modifier = Modifier.padding(contentPadding)) {
-//            if (detail == null) {
-//                IndeterminateProgress()
-//            }
-//            else AndroidView(
-//                modifier = Modifier.fillMaxSize(),
-//                factory = { RecyclerView(it).apply { layoutManager = LinearLayoutManager(it) } },
-//            ) { rv ->
-//
-//                val data = listOf(
-//                    Entry.Image(detail.thumbnail.url),
-//                    Entry.WebHooks(detail.urls),
-//                    Entry.Section("Comics"),
-//                    Entry.CrossHooks(toItems(detail.comics)),
-//                    Entry.Section("Stories"),
-//                    Entry.CrossHooks(toItems(detail.stories)),
-//                    Entry.Section("Events"),
-//                    Entry.CrossHooks(toItems(detail.events)),
-//                    Entry.Section("Series"),
-//                    Entry.CrossHooks(toItems(detail.series)),
-//                )
-//
-//                rv.recycler(
-//                    data = data,
-//                    type = Entry::type,
-//                    create = { parent, _ -> ComposeView(parent.context) },
-//                ) { entry ->
-//                    (this as ComposeView).setContent {
-//                        when (entry) {
-//                            is Entry.Image      -> Image(entry)
-//                            is Entry.CrossHooks -> FlowItems(items = entry.items, color.value)
-//                            is Entry.WebHooks   -> FlowItems(items = entry.urls.map { it.type })
-//                            is Entry.Section    -> Section(entry, color.value)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-@Composable
-private fun Image(entry: Entry.Image) = AsyncImage(
-    modifier = Modifier.fillMaxWidth(),
-    model = entry.url,
-    contentDescription = "Image"
-)
-
-@Composable
-private fun Section(it: Entry.Section, color: Color) = Text(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 16.dp),
-    style = MaterialTheme.typography.titleMedium,
-    color = color,
-    textAlign = TextAlign.Center,
-    text = it.title
-)
+import androidx.palette.graphics.Palette
+import bx.util.Optional
+import bx.util.onNotEmpty
+import com.marvel.sha.ui.ShaTopBar
+import com.marvel.sha.ui.common.*
+import com.marvel.sha.util.sanitized
+import org.koin.androidx.compose.koinViewModel
 
 @Composable @OptIn(ExperimentalLayoutApi::class)
-private fun FlowItems(items: List<String>, color: Color = Color.Yellow) = FlowRow(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 8.dp, vertical = 4.dp),
+internal fun CreatorDetailScreen(
+    modifier: Modifier = Modifier,
+    model: CreatorDetailViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
 ) {
-    items.forEach {
-        Button(
-            modifier = Modifier.padding(
-                horizontal = 4.dp,
-                vertical = 2.dp
-            ),
-            colors = buttonColors(containerColor = color),
-            onClick = { Log.info(it) } // TODO do something here
+    val detail = model.observe().collectAsState().value.valueOrNull()
+    val title = detail?.fullName?.sanitized() ?: ""
+
+    val palette = remember { mutableStateOf<Optional<Palette>>(Optional.empty()) }
+    detail?.thumbnail?.let { AsyncPalette(it, palette) }
+
+    val sectionColor = palette.sectionColor()
+
+    Scaffold(topBar = { ShaTopBar(title = title, onBackClick = onBackClick) }) { padding ->
+        Surface(
+            tonalElevation = 4.dp,
+            modifier = modifier.padding(padding)
         ) {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodySmall
-            )
+            if (detail == null) {
+                IndeterminateProgress()
+            }
+            else LazyColumn {
+                item {
+                    InlineImage(detail.thumbnail, modifier = Modifier.height(300.dp).padding(16.dp))
+                }
+                detail.comics().onNotEmpty {
+                    item { MarvelSection(sectionColor, "Comics", it.joinToString(", ") { it.name }) }
+                }
+                detail.stories().onNotEmpty {
+                    item { MarvelSection(sectionColor, "Stories", it.joinToString(", ") { it.name }) }
+                }
+                detail.series().onNotEmpty {
+                    item { MarvelSection(sectionColor, "Series", it.joinToString(", ") { it.name }) }
+                }
+                detail.urls.onNotEmpty {
+                    item {
+                        MarvelSection(sectionColor, "Web Links") {
+                            FlowRow { it.forEach { Button(onClick = {}) { Text(it.type) } } }
+                        }
+                    }
+                }
+            }
         }
     }
 }
-
-private fun toItems(it: MarvelCollection) = it.items.map { it.name }
-
-private sealed interface Entry {
-
-    val type: Int
-
-    class CrossHooks(val items: List<String>, override val type: Int = TYPE_CROSS_HOOK) : Entry
-    class Image(val url: String, override val type: Int = TYPE_IMAGE) : Entry
-    class Section(val title: String, override val type: Int = TYPE_SECTION) : Entry
-    class WebHooks(val urls: List<MarvelUrl>, override val type: Int = TYPE_WEB_HOOK) : Entry
-}
-
-private const val TYPE_SECTION = 1
-private const val TYPE_IMAGE = TYPE_SECTION + 1
-private const val TYPE_WEB_HOOK = TYPE_IMAGE + 1
-private const val TYPE_CROSS_HOOK = TYPE_WEB_HOOK + 1

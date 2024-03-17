@@ -10,19 +10,19 @@ import androidx.room.Query
 internal interface CreatorDao {
 
     @Query("SELECT COUNT(id) FROM creator")
-    fun count(): Int
+    suspend fun count(): Int
 
-    @Query("SELECT * FROM creator ORDER BY idx LIMIT :limit OFFSET :from")
-    fun paged(from: Int, limit: Int): List<CreatorEntity>
+    @Query("SELECT MAX(idx) FROM creator")
+    suspend fun maxIdx(): Int
 
     @Query("SELECT * FROM creator ORDER BY idx ASC")
     fun paging(): PagingSource<Int, CreatorEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsert(entities: List<CreatorEntity>)
+    suspend fun upsert(entities: List<CreatorEntity>)
 
     @Query("SELECT * FROM creator WHERE id = :id")
-    fun byId(id: String): CreatorEntity
+    suspend fun byId(id: String): CreatorEntity
 
     @Query("DELETE FROM creator")
     suspend fun clear()

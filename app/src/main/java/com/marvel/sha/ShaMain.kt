@@ -15,12 +15,11 @@ class ShaMain : Application() {
 
         Log.level = Log.Level.VERBOSE
         Log.sink = AndroidLogSink()
-        Log.tag = "SHA"
 
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@ShaMain)
-            modules(AppModule())
+            modules(ShaModule())
         }
     }
 
