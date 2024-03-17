@@ -11,6 +11,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import bx.logging.Log
 import com.marvel.sha.ui.common.LoadingState
 
 @Composable @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,11 @@ internal fun <T : Any> SearchListScreen(
         }
     },
     active = true,
-    onActiveChange = {},
+    onActiveChange = {
+        Log.warn { it }
+        Log.warn { it }
+        Log.warn { it }
+    },
 ) {
     if (items.itemCount == 0) {
         LoadingState(items)
