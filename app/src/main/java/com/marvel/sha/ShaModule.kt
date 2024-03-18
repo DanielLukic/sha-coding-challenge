@@ -22,7 +22,13 @@ internal object ShaModule {
         single { GsonBuilder().setPrettyPrinting().setLenient().create() }
         single { MarvelAttribution(get()) }
 
-        // role bindings for crossing module boundaries in a decoupled way:
+        // some role bindings below for crossing module boundaries in a decoupled way.
+        // if the project/team/context supports this, it is a nice way to effectively isolate modules.
+        // ideally with only a single or very few functions/vals per role interface.
+        // but for trivial apps, something like MarvelDomain with multiple functions is perfectly fine.
+        // one way to think about this: microservices ~ modules
+        // another one: roles ~ events
+
         single<ComicDetail> { BindComicDetail(get()) }
         single<ComicList> { BindComicList(get()) }
         single<MarvelDomain> { BindMarvelDomain(get()) }
@@ -34,7 +40,7 @@ internal object ShaModule {
     }
 
     private class BindComicList(private val repo: ComicRepository) : ComicList {
-        override fun observe(query: String) = repo.comics(query)
+        override fun observe(query: String) = repo.comicList(query)
     }
 
     private class BindMarvelDomain(private val repo: MarvelRepository) : MarvelDomain {

@@ -20,7 +20,7 @@ internal class ComicRepository(
     suspend fun comicDetail(characterId: String) = database.byId(characterId.toLong()).executeAsOne()
         .let(gson::fromSqlDelight)
 
-    fun comics(query: String): Flow<PagingData<MarvelComic>> {
+    fun comicList(query: String): Flow<PagingData<MarvelComic>> {
         val mediator = ComicRemoteMediator(database, service, gson, query)
         return Pager(
             config = PagingConfig(pageSize = 20),

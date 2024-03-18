@@ -6,6 +6,9 @@ import com.marvel.sha.domain.MarvelComic
 import com.marvel.sha.domain.MarvelCreator
 import kotlinx.coroutines.flow.Flow
 
+// note that for demo purposes, comicList and comicDetail are currently not used. instead, ComicList and ComicDetail
+// roles are used to access the Ktor and SqlDelight based implementation.
+
 internal interface MarvelDomain {
     fun characterList(query: String): Flow<PagingData<MarvelCharacter>>
     fun comicList(query: String): Flow<PagingData<MarvelComic>>
