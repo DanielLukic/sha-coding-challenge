@@ -53,6 +53,8 @@ internal class ComicRemoteMediator(
         val result: CompletableDeferred<MediatorResult>,
     )
 
+    // TODO revert to simple version - this was only for experimenting with "actor style" processing
+
     init {
         launch {
             requestedPages.collect { requests ->
