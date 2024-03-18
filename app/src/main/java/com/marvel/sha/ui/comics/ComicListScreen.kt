@@ -2,7 +2,6 @@ package com.marvel.sha.ui.comics
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.marvel.sha.domain.MarvelComic
 import com.marvel.sha.ui.searchlist.SearchListScreen
@@ -16,7 +15,7 @@ internal fun ComicListScreen(
 ) = SearchListScreen(
     modifier = modifier,
     state = model.state,
-    query = model.query().collectAsStateWithLifecycle(),
+    query = model.query,
     items = model.snapshot.collectAsLazyPagingItems(),
     imageUrl = { it.thumbnail.url },
     caption = { it.title },

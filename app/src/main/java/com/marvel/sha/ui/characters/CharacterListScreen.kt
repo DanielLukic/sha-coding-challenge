@@ -3,7 +3,6 @@ package com.marvel.sha.ui.characters
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.marvel.sha.domain.MarvelCharacter
 import com.marvel.sha.ui.searchlist.SearchListScreen
@@ -18,7 +17,7 @@ internal fun CharacterListScreen(
 ) = SearchListScreen(
     modifier = modifier,
     state = state,
-    query = model.query().collectAsStateWithLifecycle(),
+    query = model.query,
     items = model.snapshot.collectAsLazyPagingItems(),
     imageUrl = { it.thumbnail.url },
     caption = { it.name },
