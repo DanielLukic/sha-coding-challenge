@@ -2,6 +2,8 @@ package com.marvel.sha.ui.searchlist
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -29,6 +31,8 @@ internal fun <T : Any> SearchListScreen(
     onClearQuery: () -> Unit,
     onClick: (T) -> Unit,
 ) = Box {
+    val activity = LocalContext.current as Activity
+    val portrait = calculateWindowSizeClass(activity).heightSizeClass != WindowHeightSizeClass.Compact
     if (items.itemCount == 0) {
         LoadingState(items)
     }
@@ -38,6 +42,9 @@ internal fun <T : Any> SearchListScreen(
             columns = GridCells.Adaptive(160.dp),
             state = state
         ) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Spacer(Modifier.height(8.dp))
+            }
             items(items.itemCount) { index ->
                 val it = items[index] ?: return@items
                 SearchListItem(it, badge(it), onClick, imageUrl, caption)
@@ -45,10 +52,11 @@ internal fun <T : Any> SearchListScreen(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 LoadingState(items)
             }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Spacer(Modifier.height(if (portrait) 72.dp else 8.dp))
+            }
         }
     }
-    val activity = LocalContext.current as Activity
-    val portrait = calculateWindowSizeClass(activity).heightSizeClass != WindowHeightSizeClass.Compact
     if (portrait) FloatingSearchField(
         modifier = Modifier.align(Alignment.BottomStart),
         query = query,
