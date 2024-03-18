@@ -8,18 +8,17 @@ import bx.logging.Log
 import bx.util.Optional
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.marvel.sha.domain.MarvelImage
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 @Composable
 internal fun AsyncPalette(
-    source: MarvelImage,
+    source: String,
     palette: MutableState<Optional<Palette>> = remember { mutableStateOf(Optional.empty()) },
 ) {
     val context = LocalContext.current
     val loader = remember { ImageLoader(context).newBuilder().allowHardware(false).build() }
     LaunchedEffect(source) {
-        val request = ImageRequest.Builder(context).data(source.url).build()
+        val request = ImageRequest.Builder(context).data(source).build()
         val bd = loader.execute(request).drawable as? BitmapDrawable ?: return@LaunchedEffect
         suspendCancellableCoroutine<Unit> {
             val bitmap = bd.bitmap ?: return@suspendCancellableCoroutine
