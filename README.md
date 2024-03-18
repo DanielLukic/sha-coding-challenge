@@ -29,3 +29,9 @@ bx packages entirely.**
 - [Retrofit](https://square.github.io/retrofit/)
 - [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [SqlDelight](https://cashapp.github.io/sqldelight/)
+
+## Screenshots
+
+| Comics                                  | Detail                                  | Character                                  |
+|-----------------------------------------|-----------------------------------------|--------------------------------------------|
+| ![Screenshot 1](screenshots/comics.png) | ![Screenshot 2](screenshots/detail.png) | ![Screenshot 3](screenshots/character.png) |
