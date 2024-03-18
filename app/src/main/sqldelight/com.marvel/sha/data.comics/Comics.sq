@@ -11,6 +11,9 @@ DELETE FROM comic;
 count:
 SELECT COUNT(*) FROM comic;
 
+maxIdx:
+SELECT MAX(idx) FROM comic;
+
 paged:
 SELECT * FROM comic ORDER BY idx ASC LIMIT :limit OFFSET :offset;
 

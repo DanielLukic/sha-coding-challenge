@@ -17,7 +17,7 @@ internal class ComicService(
 ) {
     suspend fun comics(offset: Int, query: String) = client.get(BASE_URL + "comics") {
         url {
-            Log.warn { "comics $offset $query" }
+            Log.verbose { "request comics $offset $query" }
             with(authentication()) {
                 parameter("ts", ts)
                 parameter("apikey", apikey)

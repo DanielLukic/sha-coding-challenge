@@ -29,12 +29,29 @@ internal class ComicRemoteMediator(
 
     lateinit var source: PagingSource<Int, Comic>
 
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, Comic>
+    ): MediatorResult = if (loadType == LoadType.PREPEND) {
+        MediatorResult.Success(endOfPaginationReached = true)
+    }
+    else {
+        val offset = if (loadType == LoadType.REFRESH) 0
+        else withContext(Cx.IO) { database.maxIdx().executeAsOne().MAX?.toInt()?.plus(1) ?: 0 }
+
+        Log.verbose { "requesting ${loadType.javaClass.simpleName} @ $offset @ $this" }
+
+        val result = CompletableDeferred<MediatorResult>()
+        requestedPages.update { it + RequestedPage(offset, result) }
+        result.await()
+    }
+
+    private val requestedPages = MutableStateFlow(emptyList<RequestedPage>())
+
     private data class RequestedPage(
         val offset: Int,
         val result: CompletableDeferred<MediatorResult>,
     )
-
-    private val requestedPages = MutableStateFlow(emptyList<RequestedPage>())
 
     init {
         launch {
@@ -42,8 +59,7 @@ internal class ComicRemoteMediator(
 
                 val request = requests.firstOrNull() ?: return@collect
 
-                Log.warn { "processing ${request.offset} @ ${this@ComicRemoteMediator}" }
-                Log.warn { "query $query" }
+                Log.verbose { "processing ${request.offset} @ $query @ ${this@ComicRemoteMediator}" }
 
                 val offset = request.offset
 
@@ -60,7 +76,7 @@ internal class ComicRemoteMediator(
 
                     val matches = it.filter { page -> page.offset == offset }
                     assert(matches.isNotEmpty()) { matches }
-                    Log.warn { "matches ${matches.size}" }
+                    Log.verbose { "matches ${matches.size}" }
 
                     val previous = matches.dropLast(1)
                     previous.forEach { page ->
@@ -103,20 +119,5 @@ internal class ComicRemoteMediator(
         }
 
         return response
-    }
-
-    override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<Int, Comic>
-    ): MediatorResult = if (loadType == LoadType.PREPEND) {
-        MediatorResult.Success(endOfPaginationReached = true)
-    }
-    else {
-        val offset = if (loadType == LoadType.REFRESH) 0
-        else withContext(Cx.IO) { database.count().executeAsOne().toInt() }
-
-        val result = CompletableDeferred<MediatorResult>()
-        requestedPages.update { it + RequestedPage(offset, result) }
-        result.await()
     }
 }
