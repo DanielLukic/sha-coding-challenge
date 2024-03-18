@@ -5,6 +5,14 @@ these libraries. Not much focus was put on cleaning up the code or handling erro
 
 The app uses the [Super Hero API](https://superheroapi.com/) to fetch superhero data.
 
+## Notes
+
+To show usage of SqlDelight and Ktor, the comic data is handled via these libraries. Characters and creators are handled
+via Retrofit and Room.
+
+To get started quickly, I used my decades old bx libraries. Updated over time, but still quite aged. **Please ignore the
+bx packages entirely.**
+
 ## Libraries
 
 - [Coil](https://coil-kt.github.io/coil/)
@@ -21,8 +29,3 @@ The app uses the [Super Hero API](https://superheroapi.com/) to fetch superhero 
 - [Retrofit](https://square.github.io/retrofit/)
 - [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [SqlDelight](https://cashapp.github.io/sqldelight/)
-
-## Notes
-
-To show usage of SqlDelight and Ktor, the comic data is handled via these libraries. Characters and creators are handled
-via Retrofit and Room.
